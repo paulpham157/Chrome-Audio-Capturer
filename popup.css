@@ -83,12 +83,6 @@ li {
   background-color: darkred;
 }
 
-.notes {
-  padding: 10px;
-  font-size: 12px;
-  white-space: pre;
-}
-
-header, h1, p, ul, li, .button, .notes, #status, #timeRem {
+header, h1, p, ul, li, .button, #status, #timeRem {
   color: #aaa !important;
 }
