@@ -1,18 +1,15 @@
 let interval;
 let timeLeft;
 
+// displays of recording time status and updates buttons
 const displayStatus = function() {
-  //function to handle the display of time and buttons
   chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
     const status = document.getElementById("status");
     const timeRem = document.getElementById("timeRem");
     const startButton = document.getElementById("start");
     const finishButton = document.getElementById("finish");
     const cancelButton = document.getElementById("cancel");
-    //CODE TO BLOCK CAPTURE ON YOUTUBE, DO NOT DELETE
-    // if(tabs[0].url.toLowerCase().includes("youtube")) {
-    //   status.innerHTML = "Capture is disabled on this site due to copyright";
-    // } else {
+
     chrome.runtime.sendMessage({ currentTab: tabs[0].id }, response => {
       if (response) {
         chrome.storage.sync.get(
@@ -50,12 +47,11 @@ const displayStatus = function() {
         startButton.style.display = "block";
       }
     });
-    // }
   });
 };
 
+// displays time remaining or time elapsed
 const parseTime = function(time) {
-  //function to display time remaining or time elapsed
   let minutes = Math.floor(time / 1000 / 60);
   let seconds = Math.floor((time / 1000) % 60);
   if (minutes < 10 && minutes >= 0) {
@@ -72,11 +68,11 @@ const parseTime = function(time) {
 };
 
 //manipulation of the displayed buttons upon message from background
-chrome.runtime.onMessage.addListener((request, sender) => {
+chrome.runtime.onMessage.addListener(request => {
   chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
     const status = document.getElementById("status");
     const timeRem = document.getElementById("timeRem");
-    const buttons = document.getElementById("buttons");
+
     const startButton = document.getElementById("start");
     const finishButton = document.getElementById("finish");
     const cancelButton = document.getElementById("cancel");
@@ -132,22 +128,32 @@ chrome.runtime.onMessage.addListener((request, sender) => {
 //initial display for popup menu when opened
 document.addEventListener("DOMContentLoaded", function() {
   displayStatus();
-  const startKey = document.getElementById("startKey");
-  const endKey = document.getElementById("endKey");
   const startButton = document.getElementById("start");
   const finishButton = document.getElementById("finish");
   const cancelButton = document.getElementById("cancel");
-  startButton.onclick = () => {
-    chrome.runtime.sendMessage("startCaptureFromPopupButton");
-  };
-  finishButton.onclick = () => {
-    chrome.runtime.sendMessage("stopCapture");
-  };
-  cancelButton.onclick = () => {
-    chrome.runtime.sendMessage("cancelCapture");
-  };
+
+  if (startButton) {
+    startButton.onclick = () => {
+      chrome.runtime.sendMessage("startCaptureFromPopupButton");
+    };
+  }
+
+  if (finishButton) {
+    finishButton.onclick = () => {
+      chrome.runtime.sendMessage("stopCapture");
+    };
+  }
+
+  if (cancelButton) {
+    cancelButton.onclick = () => {
+      chrome.runtime.sendMessage("cancelCapture");
+    };
+  }
+
   const options = document.getElementById("options");
-  options.onclick = () => {
-    chrome.runtime.openOptionsPage();
-  };
+  if (options) {
+    options.onclick = () => {
+      chrome.runtime.openOptionsPage();
+    };
+  }
 });
