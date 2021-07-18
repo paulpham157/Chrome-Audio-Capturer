@@ -1,12 +1,12 @@
 importScripts("/../encoders/Mp3Encoder.min.js");
 
 let NUM_CH = 2, // constant
-    sampleRate = 44100,
-    options = undefined,
-    maxBuffers = undefined,
-    encoder = undefined,
-    recBuffers = undefined,
-    bufferCount = 0;
+  sampleRate = 44100,
+  options = undefined,
+  maxBuffers = undefined,
+  encoder = undefined,
+  recBuffers = undefined,
+  bufferCount = 0;
 
 function error(message) {
   self.postMessage({ command: "error", message: "mp3: " + message });
@@ -16,38 +16,30 @@ function init(data) {
   if (data.config.numChannels === NUM_CH) {
     sampleRate = data.config.sampleRate;
     options = data.options;
-  } else
-    error("numChannels must be " + NUM_CH);
-};
+  } else error("numChannels must be " + NUM_CH);
+}
 
 function setOptions(opt) {
-  if (encoder || recBuffers)
-    error("cannot set options during recording");
-  else
-    options = opt;
+  if (encoder || recBuffers) error("cannot set options during recording");
+  else options = opt;
 }
 
 function start(bufferSize) {
   maxBuffers = Math.ceil(options.timeLimit * sampleRate / bufferSize);
-  if (options.encodeAfterRecord)
-    recBuffers = [];
-  else
-    encoder = new Mp3LameEncoder(sampleRate, options.mp3.bitRate);
+  if (options.encodeAfterRecord) recBuffers = [];
+  else encoder = new Mp3LameEncoder(sampleRate, options.mp3.bitRate);
 }
 
 function record(buffer) {
   if (bufferCount++ < maxBuffers)
-    if (encoder)
-      encoder.encode(buffer);
-    else
-      recBuffers.push(buffer);
-  else
-    self.postMessage({ command: "timeout" });
-};
+    if (encoder) encoder.encode(buffer);
+    else recBuffers.push(buffer);
+  else self.postMessage({ command: "timeout" });
+}
 
 function postProgress(progress) {
   self.postMessage({ command: "progress", progress: progress });
-};
+}
 
 function finish() {
   if (recBuffers) {
@@ -69,7 +61,7 @@ function finish() {
     blob: encoder.finish(options.mp3.mimeType)
   });
   cleanup();
-};
+}
 
 function cleanup() {
   encoder = recBuffers = undefined;
@@ -79,12 +71,23 @@ function cleanup() {
 self.onmessage = function(event) {
   let data = event.data;
   switch (data.command) {
-    case "init":    init(data);                 break;
-    case "options": setOptions(data.options);   break;
-    case "start":   start(data.bufferSize);     break;
-    case "record":  record(data.buffer);        break;
-    case "finish":  finish();                   break;
-    case "cancel":  cleanup();
+    case "init":
+      init(data);
+      break;
+    case "options":
+      setOptions(data.options);
+      break;
+    case "start":
+      start(data.bufferSize);
+      break;
+    case "record":
+      record(data.buffer);
+      break;
+    case "finish":
+      finish();
+      break;
+    case "cancel":
+      cleanup();
   }
 };
 

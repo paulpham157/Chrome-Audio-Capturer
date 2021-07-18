@@ -1,12 +1,12 @@
 importScripts("/../encoders/WavEncoder.min.js");
 
 let sampleRate = 44100,
-    numChannels = 2,
-    options = undefined,
-    maxBuffers = undefined,
-    encoder = undefined,
-    recBuffers = undefined,
-    bufferCount = 0;
+  numChannels = 2,
+  options = undefined,
+  maxBuffers = undefined,
+  encoder = undefined,
+  recBuffers = undefined,
+  bufferCount = 0;
 
 function error(message) {
   self.postMessage({ command: "error", message: "wav: " + message });
@@ -16,36 +16,29 @@ function init(data) {
   sampleRate = data.config.sampleRate;
   numChannels = data.config.numChannels;
   options = data.options;
-};
+}
 
 function setOptions(opt) {
-  if (encoder || recBuffers)
-    error("cannot set options during recording");
-  else
-    options = opt;
+  if (encoder || recBuffers) error("cannot set options during recording");
+  else options = opt;
 }
 
 function start(bufferSize) {
   maxBuffers = Math.ceil(options.timeLimit * sampleRate / bufferSize);
-  if (options.encodeAfterRecord)
-    recBuffers = [];
-  else
-    encoder = new WavAudioEncoder(sampleRate, numChannels);
+  if (options.encodeAfterRecord) recBuffers = [];
+  else encoder = new WavAudioEncoder(sampleRate, numChannels);
 }
 
 function record(buffer) {
   if (bufferCount++ < maxBuffers)
-    if (encoder)
-      encoder.encode(buffer);
-    else if(recBuffers)
-      recBuffers.push(buffer);
-  else
-    self.postMessage({ command: "timeout" });
-};
+    if (encoder) encoder.encode(buffer);
+    else if (recBuffers) recBuffers.push(buffer);
+    else self.postMessage({ command: "timeout" });
+}
 
 function postProgress(progress) {
   self.postMessage({ command: "progress", progress: progress });
-};
+}
 
 function finish() {
   if (recBuffers) {
@@ -67,7 +60,7 @@ function finish() {
     blob: encoder.finish(options.wav.mimeType)
   });
   cleanup();
-};
+}
 
 function cleanup() {
   encoder = recBuffers = undefined;
@@ -77,12 +70,23 @@ function cleanup() {
 self.onmessage = function(event) {
   var data = event.data;
   switch (data.command) {
-    case "init":    init(data);                 break;
-    case "options": setOptions(data.options);   break;
-    case "start":   start(data.bufferSize);     break;
-    case "record":  record(data.buffer);        break;
-    case "finish":  finish();                   break;
-    case "cancel":  cleanup();
+    case "init":
+      init(data);
+      break;
+    case "options":
+      setOptions(data.options);
+      break;
+    case "start":
+      start(data.bufferSize);
+      break;
+    case "record":
+      record(data.buffer);
+      break;
+    case "finish":
+      finish();
+      break;
+    case "cancel":
+      cleanup();
   }
 };
 

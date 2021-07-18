@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.type === "encodingComplete") {
       save(request.audioURL, request.format, request.startTabId);
@@ -6,15 +6,20 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   function save(url, format, startTabId) {
-    const randString = Math.random().toString(36).substring(2);
-    const dateString = new Date().toISOString().replace(/[T:.]/g, '-');
+    const randString = Math.random()
+      .toString(36)
+      .substring(2);
+    const dateString = new Date().toISOString().replace(/[T:.]/g, "-");
     const filename = `cac-${dateString}-${randString}`;
 
-    chrome.downloads.download({
-      url: url,
-      filename: `${filename}.${format}`,
-      saveAs: false
-    }, onDownloadComplete.bind(startTabId));
+    chrome.downloads.download(
+      {
+        url: url,
+        filename: `${filename}.${format}`,
+        saveAs: false
+      },
+      onDownloadComplete.bind(startTabId)
+    );
   }
 
   function onDownloadComplete(startTabId) {
@@ -27,9 +32,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // closing this `completeTab` results in the startTab being
     // reactivated by default.
 
-    chrome.tabs.query({active: true, currentWindow: true}, function(matchingTabs) {
+    chrome.tabs.query({ active: true, currentWindow: true }, function(
+      matchingTabs
+    ) {
       const completeTabId = matchingTabs[0].id;
       chrome.tabs.remove(completeTabId);
     });
   }
-})
+});
