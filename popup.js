@@ -132,6 +132,8 @@ document.addEventListener("DOMContentLoaded", function() {
   const finishButton = document.getElementById("finish");
   const cancelButton = document.getElementById("cancel");
 
+  const POPUP_CLOSE_DELAY_MS = 1000;
+
   if (startButton) {
     startButton.onclick = () => {
       chrome.runtime.sendMessage("startCaptureFromPopupButton");
@@ -141,12 +143,18 @@ document.addEventListener("DOMContentLoaded", function() {
   if (finishButton) {
     finishButton.onclick = () => {
       chrome.runtime.sendMessage("stopCaptureFromPopupButton");
+      setTimeout(POPUP_CLOSE_DELAY_MS, () => {
+        window.close();
+      });
     };
   }
 
   if (cancelButton) {
     cancelButton.onclick = () => {
       chrome.runtime.sendMessage("cancelCapture");
+      setTimeout(POPUP_CLOSE_DELAY_MS, () => {
+        window.close();
+      });
     };
   }
 
