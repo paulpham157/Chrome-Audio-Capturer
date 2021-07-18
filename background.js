@@ -212,16 +212,24 @@ const audioCapture = (timeLimit, muteTab, format, quality, limitRemoved) => {
     }
     chrome.commands.onCommand.addListener(onStopCommand);
     chrome.runtime.onMessage.addListener(onStopClick);
-    mediaRecorder.onComplete = (recorder, blob) => {
-      audioURL = window.URL.createObjectURL(blob);
-      if (completeTabID) {
-        chrome.tabs.sendMessage(completeTabID, {
-          type: "encodingComplete",
-          audioURL,
-          format,
-          startTabId
-        });
-      }
+
+    mediaRecorder.onComplete = (_recorder, blob) => {
+      const audioURL = window.URL.createObjectURL(blob);
+      const randString = Math.random()
+        .toString(36)
+        .substring(2);
+      const dateString = new Date().toISOString().replace(/[T:.]/g, "-");
+      const filename = `cac-${dateString}-${randString}`;
+      chrome.downloads.download(
+        {
+          url: audioURL,
+          filename: `${filename}.${format}`,
+          saveAs: false
+        },
+        () => {
+          console.log("Saved ", filename);
+        }
+      );
       mediaRecorder = null;
     };
 
@@ -232,17 +240,6 @@ const audioCapture = (timeLimit, muteTab, format, quality, limitRemoved) => {
         endTabId = tabs[0].id;
         if (mediaRecorder && startTabId === endTabId) {
           mediaRecorder.finishRecording();
-          chrome.tabs.create(
-            {
-              url: "complete.html",
-              active: false,
-              openerTabId: startTabId,
-              selected: false
-            },
-            tab => {
-              completeTabID = tab.id;
-            }
-          );
           closeStream(endTabId);
         }
       });
