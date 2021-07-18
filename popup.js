@@ -130,7 +130,4 @@ document.addEventListener('DOMContentLoaded', function() {
   cancelButton.onclick = () => {chrome.runtime.sendMessage("cancelCapture")};
   const options = document.getElementById("options");
   options.onclick = () => {chrome.runtime.openOptionsPage()};
-  const git = document.getElementById("GitHub");
-  git.onclick = () => {chrome.tabs.create({url: "https://github.com/arblast/Chrome-Audio-Capturer"})};
-
 });
