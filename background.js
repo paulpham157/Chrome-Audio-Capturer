@@ -157,12 +157,12 @@ class Recorder {
     });
   }
 
-  onEncoderLoading(recorder, encoding) {}
-  onEncoderLoaded(recorder, encoding) {}
-  onTimeout(recorder) {}
-  onEncodingProgress(recorder, progress) {}
-  onEncodingCanceled(recorder) {}
-  onComplete(recorder, blob) {}
+  onEncoderLoading(_recorder, _encoding) {}
+  onEncoderLoaded(_recorder, _encoding) {}
+  onTimeout(_recorder) {}
+  onEncodingProgress(_recorder, _progress) {}
+  onEncodingCanceled(_recorder) {}
+  onComplete(_recorder, _blob) {}
 }
 
 const audioCapture = (timeLimit, muteTab, format, quality, limitRemoved) => {
@@ -276,7 +276,7 @@ const audioCapture = (timeLimit, muteTab, format, quality, limitRemoved) => {
 };
 
 //sends reponses to and from the popup menu
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
   if (request.currentTab && sessionStorage.getItem(request.currentTab)) {
     sendResponse(sessionStorage.getItem(request.currentTab));
   } else if (request.currentTab) {

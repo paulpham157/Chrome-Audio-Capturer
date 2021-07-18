@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
     status.innerHTML = "";
   };
 
-  quality.onchange = e => {
+  quality.onchange = _e => {
     status.innerHTML = "";
   };
 
