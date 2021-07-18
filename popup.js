@@ -140,7 +140,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   if (finishButton) {
     finishButton.onclick = () => {
-      chrome.runtime.sendMessage("stopCapture");
+      chrome.runtime.sendMessage("stopCaptureFromPopupButton");
     };
   }
 

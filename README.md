@@ -52,7 +52,7 @@ chrome.tabCapture.capture({audio: true}, (stream) => {
 ```
 
 ### Tab Management
-To allow audio capture on multiple tabs simultaneously, I stored the `tabId` of each tab being captured into the `sessionStorage` object. When a `stopCapture` command is issued, the extension will check whether the current tab is the same as the tab that the capture was started on, and only stop the specific instance of the capture on the current tab.
+To allow audio capture on multiple tabs simultaneously, I stored the `tabId` of each tab being captured into the `sessionStorage` object. When a `stopCaptureFromPopupButton` command is issued, the extension will check whether the current tab is the same as the tab that the capture was started on, and only stop the specific instance of the capture on the current tab.
 
 ```javascript
 const stopCapture = function() {

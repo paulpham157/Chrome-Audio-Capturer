@@ -198,7 +198,7 @@ const audioCapture = (timeLimit, muteTab, format, quality, limitRemoved) => {
     }
     function onStopClick(request) {
       //click on popup
-      if (request === "stopCapture") {
+      if (request === "stopCaptureFromPopupButton") {
         stopCapture();
       } else if (request === "cancelCapture") {
         cancelCapture();
