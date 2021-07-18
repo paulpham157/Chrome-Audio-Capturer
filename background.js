@@ -169,13 +169,11 @@ const audioCapture = (timeLimit, muteTab, format, quality, limitRemoved) => {
   chrome.tabCapture.capture({ audio: true }, stream => {
     // sets up stream for capture
     let startTabId; //tab when the capture is started
-    let timeout;
-    let completeTabID; //tab when the capture is stopped
-    let audioURL = null; //resulting object when encoding is completed
-    chrome.tabs.query(
-      { active: true, currentWindow: true },
-      tabs => (startTabId = tabs[0].id)
-    ); //saves start tab
+
+    chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+      startTabId = tabs[0].id;
+    });
+
     const liveStream = stream;
     const audioCtx = new AudioContext();
     const source = audioCtx.createMediaStreamSource(stream);
