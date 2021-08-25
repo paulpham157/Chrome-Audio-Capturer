@@ -63,7 +63,7 @@ li {
 
 .buttonContainer {
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-start;
 }
 
 .button {
