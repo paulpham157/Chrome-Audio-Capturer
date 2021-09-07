@@ -39,7 +39,7 @@ const CONFIGS = {
     },
     mp3: {
       mimeType: "audio/mpeg",
-      bitRate: 320 // (CBR only): bit rate = [64 .. 320]
+      bitRate: 192 // (CBR only): bit rate = [64 .. 320]
     }
   }
 };
@@ -299,7 +299,7 @@ const startCapture = function() {
           maxTime: 1200000,
           muteTab: false,
           format: "mp3",
-          quality: 320,
+          quality: 192,
           limitRemoved: false
         },
         options => {

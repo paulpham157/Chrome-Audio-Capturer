@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
       muteTab: false,
       maxTime: 1200000,
       format: "mp3",
-      quality: 320,
+      quality: 192,
       limitRemoved: false
     },
     options => {
